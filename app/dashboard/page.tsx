@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { LogOut, User, Mail, Calendar } from "lucide-react"
 import SignOutButton from "@/components/sign-out-button"
+import GitHubIssueCreator from "@/components/github-issue-creator"
 
 export default async function DashboardPage() {
   const session = await getAuth()
@@ -119,59 +120,7 @@ export default async function DashboardPage() {
           </Card>
         </div>
 
-        <Card className="mt-6 border-gray-200 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle>Getting Started</CardTitle>
-            <CardDescription>
-              Explore the features of your dashboard
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-black dark:bg-white flex items-center justify-center flex-shrink-0">
-                  <span className="text-white dark:text-black font-bold text-sm">1</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                    Your Profile is Set Up
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Your GitHub account is successfully connected and authenticated.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
-                  <span className="text-gray-700 dark:text-gray-300 font-bold text-sm">2</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                    Explore the Dashboard
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Take a look around and familiarize yourself with the interface.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
-                  <span className="text-gray-700 dark:text-gray-300 font-bold text-sm">3</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                    Customize Your Experience
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Add more features and personalize your dashboard.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <GitHubIssueCreator />
       </main>
     </div>
   )
