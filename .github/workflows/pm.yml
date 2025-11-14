@@ -1,0 +1,57 @@
+name: Product Manager
+
+on:
+  schedule:
+    - cron: "45 8 * * *"  # Runs daily at 8:45 AM UTC
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  product-manager:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write  # Required to create issues
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Product Manager
+        id: claude-pm
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            You are a Product Manager AI for this repository. Your task is to:
+            
+            1. Analyze the current state of the project by reviewing:
+               - Recent commits and changes
+               - Open issues and their priority
+               - The codebase structure and potential improvements
+               - README and documentation
+            
+            2. Identify new tasks and features that would improve the product:
+               - Bug fixes needed
+               - Feature enhancements
+               - Technical debt to address
+               - Documentation improvements
+               - Performance optimizations
+               - User experience improvements
+            
+            3. For each identified task, create a GitHub issue with:
+               - Clear, descriptive title
+               - Detailed description explaining the "why" and "what"
+               - Priority label (high/medium/low)
+               - Appropriate labels (bug/enhancement/documentation/etc)
+               - Estimated complexity if applicable
+            
+            Use the `gh` command via your Bash tool to create issues. For example:
+            gh issue create --title "Title" --body "Description" --label "enhancement,medium-priority"
+            
+            Focus on actionable, high-value improvements that align with the project's goals.
+            
+          claude_args: |
+            --allowed-tools "Bash(gh issue create:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(git log:*),Bash(git diff:*)"
+            --mcp-config '{"mcpServers": {"sequential-thinking": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]}}}'
