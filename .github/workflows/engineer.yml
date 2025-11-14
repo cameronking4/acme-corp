@@ -1,0 +1,57 @@
+name: Engineer (Next.js Specialist)
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  engineer:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@engineer')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@engineer')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@engineer')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@engineer') || contains(github.event.issue.title, '@engineer')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read # Required for Claude to read CI results on PRs
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Engineer (Claude Code)
+        id: engineer
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          show_full_output: true
+
+          # MCP servers for enhanced capabilities
+          claude_args: |
+            --mcp-config '{"mcpServers": {"sequential-thinking": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]}}}'
+            --allowedTools mcp__sequential-thinking__sequentialthinking, Bash(*), mcp__github__*
+            --systemPromptFile ENGINEER.md
+
+          # Allow Claude to read CI results on PRs
+          additional_permissions: |
+            actions: read
