@@ -1,0 +1,13 @@
+# Deployment configuration (contains sensitive info)
+.deployment-config
+
+# Azure credentials
+*.publishsettings
+
+# Local deployment artifacts
+*.zip
+deploy/
+
+# Environment-specific parameter files
+azuredeploy.parameters.*.json
+!azuredeploy.parameters.json
