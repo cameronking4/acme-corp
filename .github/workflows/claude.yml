@@ -35,6 +35,9 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: |
+            --mcp-config '{"mcpServers": {"sequential-thinking": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]}}}'
+            --allowedTools mcp__sequential-thinking__sequentialthinking, Bash(*)
 
           # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
