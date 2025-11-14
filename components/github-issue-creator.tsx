@@ -21,7 +21,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { toast } from 'sonner'
 
 interface Repository {
   id: number
@@ -38,16 +38,13 @@ export function GitHubIssueCreator() {
   const [selectedRepo, setSelectedRepo] = React.useState<Repository | null>(null)
   const [repos, setRepos] = React.useState<Repository[]>([])
   const [loading, setLoading] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
   const [issueTitle, setIssueTitle] = React.useState('')
   const [issueBody, setIssueBody] = React.useState('')
   const [creating, setCreating] = React.useState(false)
-  const [success, setSuccess] = React.useState<{ url: string; number: number } | null>(null)
 
   React.useEffect(() => {
     async function fetchRepos() {
       setLoading(true)
-      setError(null)
       try {
         const response = await fetch('/api/github/repos')
         if (!response.ok) {
@@ -56,7 +53,9 @@ export function GitHubIssueCreator() {
         const data = await response.json()
         setRepos(data)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load repositories')
+        toast.error('Failed to load repositories', {
+          description: err instanceof Error ? err.message : 'An unexpected error occurred'
+        })
       } finally {
         setLoading(false)
       }
@@ -73,8 +72,6 @@ export function GitHubIssueCreator() {
     }
 
     setCreating(true)
-    setError(null)
-    setSuccess(null)
 
     try {
       const response = await fetch('/api/github/issues', {
@@ -96,11 +93,19 @@ export function GitHubIssueCreator() {
       }
 
       const issue = await response.json()
-      setSuccess({ url: issue.html_url, number: issue.number })
+      toast.success('Issue created successfully!', {
+        description: `Issue #${issue.number} has been created`,
+        action: {
+          label: 'View',
+          onClick: () => window.open(issue.html_url, '_blank')
+        }
+      })
       setIssueTitle('')
       setIssueBody('')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create issue')
+      toast.error('Failed to create issue', {
+        description: err instanceof Error ? err.message : 'An unexpected error occurred'
+      })
     } finally {
       setCreating(false)
     }
@@ -118,29 +123,6 @@ export function GitHubIssueCreator() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {error && (
-          <Alert variant="destructive">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {success && (
-          <Alert>
-            <AlertTitle>Issue Created Successfully!</AlertTitle>
-            <AlertDescription>
-              <a
-                href={success.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline hover:no-underline"
-              >
-                View Issue #{success.number}
-              </a>
-            </AlertDescription>
-          </Alert>
-        )}
-
         <div className="space-y-2">
           <Label htmlFor="repository">Repository</Label>
           <Popover open={open} onOpenChange={setOpen}>
@@ -179,7 +161,6 @@ export function GitHubIssueCreator() {
                         onSelect={() => {
                           setSelectedRepo(repo)
                           setOpen(false)
-                          setSuccess(null)
                         }}
                       >
                         <Check
