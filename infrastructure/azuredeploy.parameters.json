@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "webAppName": {
+      "value": "acme-corp-app"
+    },
+    "sku": {
+      "value": "B1"
+    },
+    "nodeVersion": {
+      "value": "18-lts"
+    },
+    "nextAuthUrl": {
+      "value": "https://your-app-name.azurewebsites.net"
+    },
+    "nextAuthSecret": {
+      "value": "REPLACE_WITH_YOUR_SECRET"
+    },
+    "githubId": {
+      "value": "REPLACE_WITH_YOUR_GITHUB_CLIENT_ID"
+    },
+    "githubSecret": {
+      "value": "REPLACE_WITH_YOUR_GITHUB_CLIENT_SECRET"
+    },
+    "enableApplicationInsights": {
+      "value": true
+    }
+  }
+}
