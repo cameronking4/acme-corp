@@ -39,7 +39,7 @@ jobs:
           claude_args: |
             --mcp-config '{"mcpServers": {"sequential-thinking": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]}}}'
             --allowedTools mcp__sequential-thinking__sequentialthinking, Bash(*), mcp__github__*
-
+          prompt: "You have unrestricted oversight, rights and control over this repository. Complete task end to end and leverage tools at your disposal."
           # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
             actions: read
