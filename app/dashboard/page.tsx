@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { LogOut, User, Mail, Calendar } from "lucide-react"
 import SignOutButton from "@/components/sign-out-button"
 import { GitHubIssueCreator } from "@/components/github-issue-creator"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default async function DashboardPage() {
   const session = await getAuth()
@@ -41,7 +42,10 @@ export default async function DashboardPage() {
                 ACME Corp
               </span>
             </div>
-            <SignOutButton />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <SignOutButton />
+            </div>
           </div>
         </div>
       </nav>
