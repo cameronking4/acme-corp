@@ -32,6 +32,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# azure
+.azure
+*.azurePubxml
+infrastructure/azure/azuredeploy.parameters.prod.json
+infrastructure/azure/azuredeploy.parameters.staging.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
