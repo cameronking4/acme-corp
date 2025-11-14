@@ -1,5 +1,7 @@
 # ACME Corp - Next.js Authentication App
 
+[![Deploy to Azure](https://github.com/cameronking4/acme-corp/actions/workflows/azure-deploy.yml/badge.svg)](https://github.com/cameronking4/acme-corp/actions/workflows/azure-deploy.yml)
+
 A modern Next.js application with GitHub OAuth authentication, built with NextAuth, shadcn/ui components, and Vercel-style theming.
 
 ## Features
@@ -13,6 +15,8 @@ A modern Next.js application with GitHub OAuth authentication, built with NextAu
 - 🎭 TypeScript support
 - 🎨 Tailwind CSS styling
 - 🎪 Lucide React icons
+- ☁️ Azure deployment with Infrastructure as Code (ARM templates)
+- 🚀 Automated CI/CD with GitHub Actions
 
 ## Prerequisites
 
