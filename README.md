@@ -156,7 +156,22 @@ The `middleware.ts` file protects the `/dashboard` route and all nested routes. 
 
 ## Deployment
 
-### Vercel (Recommended)
+### Azure (Infrastructure as Code)
+
+Deploy to Azure with automated CI/CD using ARM templates and GitHub Actions. See the complete guide: [AZURE_DEPLOYMENT.md](./AZURE_DEPLOYMENT.md)
+
+**Quick Start:**
+
+1. Create Azure service principal and configure GitHub secrets
+2. Push to main branch to trigger automated deployment
+3. Application automatically deploys to Azure App Service with:
+   - App Service Plan (Linux, Node.js 20)
+   - App Service (Web App)
+   - Application Insights (Monitoring)
+
+For detailed instructions, troubleshooting, and manual deployment options, see [AZURE_DEPLOYMENT.md](./AZURE_DEPLOYMENT.md).
+
+### Vercel (Alternative)
 
 1. Push your code to GitHub
 2. Import your repository in Vercel
