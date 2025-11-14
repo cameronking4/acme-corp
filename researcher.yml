@@ -1,0 +1,71 @@
+name: Researcher (Web Research & Analysis)
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  researcher:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@researcher')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@researcher')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@researcher')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@researcher') || contains(github.event.issue.title, '@researcher')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Run Researcher (Claude Code)
+        id: researcher
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          show_full_output: true
+
+          # MCP servers for research capabilities
+          claude_args: |
+            --mcp-config '{
+              "mcpServers": {
+                "sequential-thinking": {
+                  "command": "npx",
+                  "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+                },
+                "playwright": {
+                  "command": "npx",
+                  "args": ["-y", "@modelcontextprotocol/server-playwright"]
+                },
+                "hyperbrowser": {
+                  "command": "npx",
+                  "args": ["-y", "@hyperbrowser/mcp"]
+                }
+              }
+            }'
+            --allowedTools mcp__sequential-thinking__sequentialthinking, mcp__playwright__*, mcp__hyperbrowser__*, WebSearch, WebFetch, Bash(*), mcp__github__*
+            --systemPromptFile RESEARCHER.md
+
+          # Allow Claude to read CI results and perform web operations
+          additional_permissions: |
+            actions: read
